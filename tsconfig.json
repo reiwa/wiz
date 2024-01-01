@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "module": "NodeNext",
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "target": "es2022",
+    "moduleResolution": "NodeNext",
+    "jsx": "react-jsx",
+    "types": ["vitest/globals"]
+  },
+  "include": ["./src/**/*"]
+}

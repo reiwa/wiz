@@ -1,0 +1,28 @@
+{
+  "cSpell.words": [],
+  "files.exclude": {
+    "**/node_modules": true,
+    "*.tsbuildinfo": true,
+    "lib": true,
+    "package-lock.json": true
+  },
+  "search.exclude": {
+    "*.lock": true,
+    "package-lock.json": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.autoImportFileExcludePatterns": [],
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "[typescript][typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "quickfix.biome": "explicit",
+      "source.organizeImports.biome": "explicit"
+    }
+  },
+  "[json][jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
+}
