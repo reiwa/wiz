@@ -5,13 +5,15 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "swc src --out-dir lib",
-    "dev": "node --loader @swc-node/register/esm src/index.tsx"
+    "dev": "node --loader @swc-node/register/esm src/index.tsx",
+    "check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "reiwa",
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@xstate/react": "^4.0.2",
     "ink": "^4.4.1",
     "meow": "^13.0.0",
     "react": "^18.2.0",

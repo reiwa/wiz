@@ -1,16 +1,17 @@
+import { readFile } from "fs/promises"
 import { render } from "ink"
 import { MainView } from "./components/main-view.js"
 
-process.stdout.write("\x1b[0f")
+console.clear()
 
-process.stdout.write("\x1b[?1049h")
+const mapText = await readFile("assets/map.txt", "utf-8")
 
 /**
  * https://github.com/vadimdemedes/ink/issues/263#issuecomment-1634312819
  */
 process.on("exit", () => {
-  process.stdout.write("\x1b[?1049l")
-  process.stdout.write("\x1b[0f")
+  console.clear()
+  // save
 })
 
-render(<MainView />)
+render(<MainView mapText={mapText} />)

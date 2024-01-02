@@ -1,55 +1,49 @@
-import { Box, Text, useApp, useInput } from "ink"
-import { useEffect, useState } from "react"
+import { useMachine } from "@xstate/react"
+import { Box, useApp, useInput } from "ink"
+import { RootEngine } from "../engine/engine/root-engine.js"
+import { stateMachine } from "../engine/state-machine.js"
 import { useWindowSize } from "../hooks/use-window-size.js"
+import { AsideView } from "./aside-view.js"
+import { GraphicView } from "./graphic-view.js"
+import { MessageView } from "./message-view.js"
 
-export const MainView = () => {
+type Props = {
+  mapText: string
+}
+
+export const MainView = (props: Props) => {
   const app = useApp()
 
-  const [counter, setCounter] = useState(0)
+  const [state, send] = useMachine(stateMachine, {
+    input: { mapText: props.mapText },
+  })
 
-  const [text, setText] = useState("")
+  const [windowWidth, windowHeight] = useWindowSize()
 
-  const [columns, rows] = useWindowSize()
+  const rootEngine = new RootEngine(send, {
+    config: state.context.config,
+    view: state.context.view,
+    player: state.context.player,
+    windowWidth: windowWidth,
+    windowHeight: windowHeight,
+  })
 
   useInput((input, key) => {
-    if (input === "q" || key.escape) {
+    if (key.ctrl && input === "c") {
       app.exit()
     }
-
-    if (key.leftArrow) {
-      setText((value) => `${value}左`)
-    }
-
-    if (key.rightArrow) {
-      setText((value) => `${value}右`)
-    }
-
-    if (key.upArrow) {
-      setText((value) => `${value}上`)
-    }
-
-    if (key.downArrow) {
-      setText((value) => `${value}下`)
-    }
+    rootEngine.handleInput(input)
   })
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCounter((value) => value + 1)
-    }, 2000)
-
-    return () => {
-      clearInterval(timer)
-    }
-  })
+  const blocks = rootEngine.getViewportBlocks()
 
   return (
-    <Box flexDirection="column">
-      <Text backgroundColor={"green"}>count: {counter}</Text>
-      <Text>
-        {rows} x {columns}
-      </Text>
-      <Text>{text}</Text>
+    <Box flexDirection="row" gap={1} overflow={"hidden"}>
+      <AsideView config={state.context.config} player={state.context.player} />
+      <Box flexDirection="column">
+        <GraphicView blocks={blocks} />
+        <MessageView config={state.context.config} />
+      </Box>
     </Box>
   )
 }

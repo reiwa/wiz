@@ -1,5 +1,5 @@
 {
-  "cSpell.words": [],
+  "cSpell.words": ["xstate"],
   "files.exclude": {
     "**/node_modules": true,
     "*.tsbuildinfo": true,
