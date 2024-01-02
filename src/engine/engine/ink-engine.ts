@@ -1,4 +1,4 @@
-export class BlockEngine {
+export class InkEngine {
   getBlock(text: string) {
     const spaceText = " "
 
@@ -23,7 +23,7 @@ export class BlockEngine {
     if (text === ".") {
       return {
         color: "#f0d0b0",
-        text: ".",
+        text: " ",
         type: "FLOOR",
         isFloor: false,
       }
@@ -35,7 +35,7 @@ export class BlockEngine {
     if (text === "1") {
       return {
         color: "#004058",
-        text: spaceText,
+        text: " ",
         type: "WALL",
         isWall: true,
       }
@@ -47,7 +47,7 @@ export class BlockEngine {
     if (text === "2") {
       return {
         color: "#bcbcbc",
-        text: ".",
+        text: " ",
         type: "ROAD",
         isFloor: false,
       }

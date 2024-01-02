@@ -19,6 +19,8 @@ export const AsideView = (props: Props) => {
       <Text>{"Lv. 2"}</Text>
       <Newline />
       <Text>{`p ${props.player.x}, ${props.player.y}`}</Text>
+      <Newline />
+      <Text>{"HP 4/16"}</Text>
     </Box>
   )
 }

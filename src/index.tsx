@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises"
 import { render } from "ink"
-import { MainView } from "./components/main-view.js"
+import { RootView } from "./components/root-view.js"
 
 console.clear()
 
@@ -14,4 +14,4 @@ process.on("exit", () => {
   // save
 })
 
-render(<MainView mapText={mapText} />)
+render(<RootView mapText={mapText} />)

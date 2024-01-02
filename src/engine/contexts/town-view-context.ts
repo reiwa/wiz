@@ -1,7 +1,6 @@
 import { z } from "zod"
 
-export const zProps = z.object({
-  mapText: z.string(),
+const zProps = z.object({
   playerX: z.number(),
   playerY: z.number(),
   viewportX: z.number(),
@@ -10,9 +9,7 @@ export const zProps = z.object({
 
 export type Props = z.infer<typeof zProps>
 
-export class ViewContext implements Props {
-  readonly mapText!: string
-
+export class TownViewContext implements Props {
   /**
    * ビューの中心の座標
    */
@@ -46,6 +43,6 @@ export class ViewContext implements Props {
 
   static fromJSON(json: string) {
     const props = JSON.parse(json)
-    return new ViewContext(props)
+    return new TownViewContext(props)
   }
 }

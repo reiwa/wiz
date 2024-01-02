@@ -1,12 +1,12 @@
 import { Text } from "ink"
-import { BlockEngine } from "../engine/engine/block-engine.js"
+import { InkEngine } from "../engine/engine/ink-engine.js"
 
 type Props = {
   value: string
 }
 
 export function FieldBlock(props: Props) {
-  const blockEngine = new BlockEngine()
+  const blockEngine = new InkEngine()
 
   const block = blockEngine.getBlock(props.value)
 

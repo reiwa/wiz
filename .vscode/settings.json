@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["xstate"],
+  "cSpell.words": ["cooldown", "xstate"],
   "files.exclude": {
     "**/node_modules": true,
     "*.tsbuildinfo": true,
