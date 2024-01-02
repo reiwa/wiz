@@ -4,7 +4,7 @@ export class BlockEngine {
 
     if (text === "@") {
       return {
-        color: "#0058f8",
+        color: "#0078f8",
         text: "@",
         type: "PLAYER",
         isWall: true,
@@ -22,7 +22,7 @@ export class BlockEngine {
 
     if (text === ".") {
       return {
-        color: "grey",
+        color: "#f0d0b0",
         text: ".",
         type: "FLOOR",
         isFloor: false,
@@ -70,7 +70,7 @@ export class BlockEngine {
      */
     if (text === "4") {
       return {
-        color: "#008888",
+        color: "#bcbcbc",
         text: spaceText,
         type: "FLOOR_INSIDE_BUILDING",
         isFloor: false,
