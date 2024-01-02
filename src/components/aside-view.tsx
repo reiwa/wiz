@@ -3,6 +3,7 @@ import { ConfigContext } from "../engine/contexts/config-context.js"
 import { PlayerContext } from "../engine/contexts/player-context.js"
 
 type Props = {
+  value: string
   config: ConfigContext
   player: PlayerContext
 }
@@ -16,6 +17,8 @@ export const AsideView = (props: Props) => {
       width={props.config.leftWindowWidth}
       borderStyle={"bold"}
     >
+      <Text>{props.value}</Text>
+      <Newline />
       <Text>{"Lv. 2"}</Text>
       <Newline />
       <Text>{`p ${props.player.x}, ${props.player.y}`}</Text>

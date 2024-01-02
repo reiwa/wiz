@@ -8,6 +8,6 @@ export type StateMachineContext = {
   player: PlayerContext
   config: ConfigContext
   townView: TownViewContext
-  dungeon: DungeonViewContext
+  dungeonView: DungeonViewContext
   mapView: MapViewContext
 }

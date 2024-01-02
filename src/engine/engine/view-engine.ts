@@ -1,4 +1,5 @@
 import { ConfigContext } from "../contexts/config-context.js"
+import { DungeonViewContext } from "../contexts/dungeon-view-context.js"
 import { MapViewContext } from "../contexts/map-view-context.js"
 import { PlayerContextAction } from "../contexts/player-context-action.js"
 import { PlayerContext } from "../contexts/player-context.js"
@@ -10,6 +11,7 @@ type Props = {
   view: TownViewContext
   player: PlayerContext
   mapView: MapViewContext
+  dungeonView: DungeonViewContext
 }
 
 export class ViewEngine {
@@ -20,6 +22,8 @@ export class ViewEngine {
   readonly player!: Props["player"]
 
   readonly mapView!: Props["mapView"]
+
+  readonly dungeonView!: Props["dungeonView"]
 
   constructor(props: Props) {
     Object.assign(this, props)
@@ -59,6 +63,8 @@ export class ViewEngine {
     const startX = this.player.x - halfViewportWidth
     const startY = this.player.y - halfViewportHeight
 
+    const enemies = this.dungeonView.enemies
+
     // ビューポート内の各ブロックを更新
     const viewport = Array.from(
       { length: this.getViewportHeight(windowHeight) },
@@ -71,6 +77,11 @@ export class ViewEngine {
             // プレイヤーの位置
             if (x === halfViewportWidth && y === halfViewportHeight) {
               return "@"
+            }
+            for (const enemy of enemies) {
+              if (enemy.x === mapX && enemy.y === mapY) {
+                return "e"
+              }
             }
             if (
               mapX >= 0 &&
@@ -88,6 +99,10 @@ export class ViewEngine {
     )
 
     return viewport
+  }
+
+  moveEnemy() {
+    // TODO: 敵の移動処理
   }
 
   moveToTop() {

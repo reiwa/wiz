@@ -22,9 +22,10 @@ export const RootView = (props: Props) => {
 
   const gameEngine = new ViewEngine({
     config: state.context.config,
-    view: state.context.townView,
     player: state.context.player,
+    view: state.context.townView,
     mapView: state.context.mapView,
+    dungeonView: state.context.dungeonView,
   })
 
   useInput((input, key) => {
@@ -33,35 +34,39 @@ export const RootView = (props: Props) => {
     }
     if (input === "w" && gameEngine.hasEmptyTop) {
       send({ type: "MOVE", value: gameEngine.moveToTop() })
-      send({ type: "DONE" })
+      send({ type: "CONTINUE" })
     }
     if (input === "a" && gameEngine.hasEmptyLeft) {
       send({ type: "MOVE", value: gameEngine.moveToLeft() })
-      send({ type: "DONE" })
+      send({ type: "CONTINUE" })
     }
     if (input === "s" && gameEngine.hasEmptyBottom) {
       send({ type: "MOVE", value: gameEngine.moveToBottom() })
-      send({ type: "DONE" })
+      send({ type: "CONTINUE" })
     }
     if (input === "d" && gameEngine.hasEmptyRight) {
       send({ type: "MOVE", value: gameEngine.moveToRight() })
-      send({ type: "DONE" })
+      for (const enemy of gameEngine.dungeonView.enemies) {
+        send({ type: "ENEMY_MOVE", value: gameEngine.moveEnemy() })
+        send({ type: "CONTINUE" })
+      }
+      send({ type: "CONTINUE" })
     }
     if (input === "q" && gameEngine.hasEmptyTopLeft) {
       send({ type: "MOVE", value: gameEngine.moveToTopLeft() })
-      send({ type: "DONE" })
+      send({ type: "CONTINUE" })
     }
     if (input === "e" && gameEngine.hasEmptyTopRight) {
       send({ type: "MOVE", value: gameEngine.moveToTopRight() })
-      send({ type: "DONE" })
+      send({ type: "CONTINUE" })
     }
     if (input === "z" && gameEngine.hasEmptyBottomLeft) {
       send({ type: "MOVE", value: gameEngine.moveToBottomLeft() })
-      send({ type: "DONE" })
+      send({ type: "CONTINUE" })
     }
     if (input === "x" && gameEngine.hasEmptyBottomRight) {
       send({ type: "MOVE", value: gameEngine.moveToBottomRight() })
-      send({ type: "DONE" })
+      send({ type: "CONTINUE" })
     }
     if (input === ".") {
       send({ type: "REST" })
@@ -75,7 +80,11 @@ export const RootView = (props: Props) => {
 
   return (
     <Box flexDirection="row" gap={1} overflow={"hidden"}>
-      <AsideView config={state.context.config} player={state.context.player} />
+      <AsideView
+        value={Array.from(state.tags.values()).join(",")}
+        config={state.context.config}
+        player={state.context.player}
+      />
       <Box flexDirection="column">
         <GraphicView blocks={blocks} />
         <MessageView config={state.context.config} />
