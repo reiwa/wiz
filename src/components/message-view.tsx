@@ -15,6 +15,7 @@ export const MessageView = (props: Props) => {
       borderStyle={"bold"}
     >
       <Text>{"i = 所持品"}</Text>
+      <Text>{"w = 上に移動, a = 左, s = 下, d = 右"}</Text>
     </Box>
   )
 }

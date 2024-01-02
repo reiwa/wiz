@@ -4,6 +4,7 @@ import { ConfigContext } from "../contexts/config-context.js"
 import { PlayerContextAction } from "../contexts/player-context-action.js"
 import { PlayerContext } from "../contexts/player-context.js"
 import { ViewContext } from "../contexts/view-context.js"
+import { BlockEngine } from "./block-engine.js"
 
 const zProps = z.object({
   config: z.instanceof(ConfigContext),
@@ -73,8 +74,13 @@ export class RootEngine {
     })
   }
 
-  getBlock(x: number, y: number) {
+  getBlockValue(x: number, y: number) {
     return this.fullMap[y * this.mapWidth + x]
+  }
+
+  getBlock(x: number, y: number) {
+    const engine = new BlockEngine()
+    return engine.getBlock(this.getBlockValue(x, y))
   }
 
   getViewportBlocks() {
@@ -101,7 +107,7 @@ export class RootEngine {
           mapY >= 0 &&
           mapY < this.mapHeight
         ) {
-          return this.getBlock(mapX, mapY)
+          return this.getBlockValue(mapX, mapY)
         }
         // マップの外
         return "0"
@@ -154,74 +160,66 @@ export class RootEngine {
   }
 
   moveToTop() {
+    const block = this.getBlock(this.player.x, this.player.y - 1)
+    if (block.isWall) return
     const engine = new PlayerContextAction(this.player)
-    this.send({
-      type: "MOVE",
-      value: engine.moveToTop(),
-    })
+    this.send({ type: "MOVE", value: engine.moveToTop() })
     this.send({ type: "DONE" })
   }
 
   moveToLeft() {
+    const block = this.getBlock(this.player.x - 1, this.player.y)
+    if (block.isWall) return
     const engine = new PlayerContextAction(this.player)
-    this.send({
-      type: "MOVE",
-      value: engine.moveToLeft(),
-    })
+    this.send({ type: "MOVE", value: engine.moveToLeft() })
     this.send({ type: "DONE" })
   }
 
   moveToBottom() {
+    const block = this.getBlock(this.player.x, this.player.y + 1)
+    if (block.isWall) return
     const engine = new PlayerContextAction(this.player)
-    this.send({
-      type: "MOVE",
-      value: engine.moveToBottom(),
-    })
+    this.send({ type: "MOVE", value: engine.moveToBottom() })
     this.send({ type: "DONE" })
   }
 
   moveToRight() {
+    const block = this.getBlock(this.player.x + 1, this.player.y)
+    if (block.isWall) return
     const engine = new PlayerContextAction(this.player)
-    this.send({
-      type: "MOVE",
-      value: engine.moveToRight(),
-    })
+    this.send({ type: "MOVE", value: engine.moveToRight() })
     this.send({ type: "DONE" })
   }
 
   moveToTopLeft() {
+    const block = this.getBlock(this.player.x - 1, this.player.y - 1)
+    if (block.isWall) return
     const engine = new PlayerContextAction(this.player)
-    this.send({
-      type: "MOVE",
-      value: engine.moveToTopLeft(),
-    })
+    this.send({ type: "MOVE", value: engine.moveToTopLeft() })
     this.send({ type: "DONE" })
   }
 
   moveToTopRight() {
+    const block = this.getBlock(this.player.x + 1, this.player.y - 1)
+    if (block.isWall) return
     const engine = new PlayerContextAction(this.player)
-    this.send({
-      type: "MOVE",
-      value: engine.moveToTopRight(),
-    })
+    this.send({ type: "MOVE", value: engine.moveToTopRight() })
     this.send({ type: "DONE" })
   }
 
   moveToBottomLeft() {
+    const block = this.getBlock(this.player.x - 1, this.player.y + 1)
+    if (block.isWall) return
     const engine = new PlayerContextAction(this.player)
-    this.send({
-      type: "MOVE",
-      value: engine.moveToBottomLeft(),
-    })
+    this.send({ type: "MOVE", value: engine.moveToBottomLeft() })
     this.send({ type: "DONE" })
   }
 
   moveToBottomRight() {
+    const block = this.getBlock(this.player.x + 1, this.player.y + 1)
+    if (block.isWall) return
     const engine = new PlayerContextAction(this.player)
-    this.send({
-      type: "MOVE",
-      value: engine.moveToBottomRight(),
-    })
+    this.send({ type: "MOVE", value: engine.moveToBottomRight() })
     this.send({ type: "DONE" })
   }
 }
