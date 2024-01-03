@@ -77,6 +77,15 @@ export class ActorContextFactory {
     })
   }
 
+  toJSON() {
+    return JSON.stringify(this.context)
+  }
+
+  static fromJSON(json: string) {
+    const props = JSON.parse(json)
+    return new ActorContext(props)
+  }
+
   static fromAsset(
     asset: z.infer<typeof characterAssetSchema>,
     props: {
@@ -90,6 +99,7 @@ export class ActorContextFactory {
       name: asset.name,
       x: props.x,
       y: props.y,
+      direction: "RIGHT",
       lifePoint: asset.life_point,
       maxLifePoint: asset.life_point,
       experiencePoint: asset.experience_point,

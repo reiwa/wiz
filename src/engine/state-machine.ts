@@ -5,7 +5,6 @@ import { ConfigContext } from "./contexts/config-context.js"
 import { DungeonViewContext } from "./contexts/dungeon-view-context.js"
 import { FieldViewContext } from "./contexts/field-view-context.js"
 import { MapViewContextFactory } from "./contexts/map-view-context-factory.js"
-import { PlayerContext } from "./contexts/player-context.js"
 import { StateMachineContext } from "./contexts/types/state-machine-context.js"
 
 export const stateMachine = createMachine({
@@ -19,11 +18,29 @@ export const stateMachine = createMachine({
   },
   context(props) {
     return {
-      player: new PlayerContext({
-        lifePoint: 16,
-        experiencePoint: 0,
-        x: 16,
-        y: 8,
+      player: new ActorContext({
+        id: nanoid(),
+        name: "@",
+        symbol: "@",
+        x: 18,
+        y: 14,
+        direction: "RIGHT",
+        lifePoint: 4,
+        maxLifePoint: 4,
+        experiencePoint: 2,
+        cooldownTime: 1,
+        maxCooldownTime: 1,
+        attack: 2,
+        maxAttack: 2,
+        defense: 2,
+        maxDefense: 2,
+        magicAttack: 0,
+        maxMagicAttack: 0,
+        magicDefense: 0,
+        maxMagicDefense: 0,
+        dexterity: 1,
+        evasion: 1,
+        humanity: 4,
       }),
       config: new ConfigContext({
         windowGap: 1,
@@ -31,8 +48,6 @@ export const stateMachine = createMachine({
         bottomWindowHeight: 8,
       }),
       fieldView: new FieldViewContext({
-        playerX: 0,
-        playerY: 0,
         viewportX: 0,
         viewportY: 0,
         enemies: [
@@ -42,6 +57,7 @@ export const stateMachine = createMachine({
             symbol: "S",
             x: 8,
             y: 8,
+            direction: "RIGHT",
             lifePoint: 4,
             maxLifePoint: 4,
             experiencePoint: 2,

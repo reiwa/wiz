@@ -2,18 +2,19 @@ import { existsSync } from "fs"
 import { homedir } from "os"
 import { join } from "path"
 import { mkdir, readFile, writeFile } from "fs/promises"
-import { PlayerContextFactory } from "../contexts/player-context-factory.js"
-import { PlayerContext } from "../contexts/player-context.js"
+import { ActorContextFactory } from "../contexts/actor-context-factory.js"
+import { ActorContext } from "../contexts/actor-context.js"
 
 export class PlayerRepository {
   get configPath() {
     return join(homedir(), ".config", "wiz")
   }
 
-  async write(context: PlayerContext) {
+  async write(context: ActorContext) {
     await this.createDirectory()
     const filePath = join(this.configPath, "player.json")
-    const text = context.toJSON()
+    const factory = new ActorContextFactory(context)
+    const text = factory.toJSON()
     await writeFile(filePath, text)
   }
 
@@ -21,7 +22,7 @@ export class PlayerRepository {
     await this.createDirectory()
     const filePath = join(this.configPath, "player.json")
     const text = await readFile(filePath, "utf-8")
-    return PlayerContextFactory.fromJSON(text)
+    return ActorContextFactory.fromJSON(text)
   }
 
   async createDirectory() {

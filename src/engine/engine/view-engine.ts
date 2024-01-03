@@ -1,15 +1,14 @@
 import { ActorContextFactory } from "../contexts/actor-context-factory.js"
+import { ActorContext } from "../contexts/actor-context.js"
 import { ConfigContext } from "../contexts/config-context.js"
 import { FieldViewContext } from "../contexts/field-view-context.js"
 import { MapViewContext } from "../contexts/map-view-context.js"
-import { PlayerContextFactory } from "../contexts/player-context-factory.js"
-import { PlayerContext } from "../contexts/player-context.js"
 import { InkEngine } from "./ink-engine.js"
 
 type Props = {
   config: ConfigContext
   view: FieldViewContext
-  player: PlayerContext
+  player: ActorContext
   mapView: MapViewContext
   townView: FieldViewContext
 }
@@ -131,42 +130,42 @@ export class ViewEngine {
   }
 
   moveToTop() {
-    const factory = new PlayerContextFactory(this.player)
+    const factory = new ActorContextFactory(this.player)
     return factory.moveToTop()
   }
 
   moveToLeft() {
-    const factory = new PlayerContextFactory(this.player)
+    const factory = new ActorContextFactory(this.player)
     return factory.moveToLeft()
   }
 
   moveToBottom() {
-    const factory = new PlayerContextFactory(this.player)
+    const factory = new ActorContextFactory(this.player)
     return factory.moveToBottom()
   }
 
   moveToRight() {
-    const factory = new PlayerContextFactory(this.player)
+    const factory = new ActorContextFactory(this.player)
     return factory.moveToRight()
   }
 
   moveToTopLeft() {
-    const factory = new PlayerContextFactory(this.player)
+    const factory = new ActorContextFactory(this.player)
     return factory.moveToTopLeft()
   }
 
   moveToTopRight() {
-    const factory = new PlayerContextFactory(this.player)
+    const factory = new ActorContextFactory(this.player)
     return factory.moveToTopRight()
   }
 
   moveToBottomLeft() {
-    const factory = new PlayerContextFactory(this.player)
+    const factory = new ActorContextFactory(this.player)
     return factory.moveToBottomLeft()
   }
 
   moveToBottomRight() {
-    const factory = new PlayerContextFactory(this.player)
+    const factory = new ActorContextFactory(this.player)
     return factory.moveToBottomRight()
   }
 

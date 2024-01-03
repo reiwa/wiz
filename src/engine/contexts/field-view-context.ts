@@ -2,8 +2,6 @@ import { z } from "zod"
 import { ActorContext } from "./actor-context.js"
 
 const zProps = z.object({
-  playerX: z.number(),
-  playerY: z.number(),
   viewportX: z.number(),
   viewportY: z.number(),
   enemies: z.array(z.instanceof(ActorContext)),
@@ -18,13 +16,6 @@ export class FieldViewContext implements Props {
   readonly viewportX!: Props["viewportX"]
 
   readonly viewportY!: Props["viewportY"]
-
-  /**
-   * プレイヤーの座標
-   */
-  readonly playerX!: Props["playerX"]
-
-  readonly playerY!: Props["playerY"]
 
   /**
    * プレイヤーの移動可能な範囲

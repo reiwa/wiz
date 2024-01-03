@@ -1,11 +1,11 @@
 import { Box, Newline, Text } from "ink"
+import { ActorContext } from "../engine/contexts/actor-context.js"
 import { ConfigContext } from "../engine/contexts/config-context.js"
-import { PlayerContext } from "../engine/contexts/player-context.js"
 
 type Props = {
   value: string
   config: ConfigContext
-  player: PlayerContext
+  player: ActorContext
 }
 
 export const AsideView = (props: Props) => {
