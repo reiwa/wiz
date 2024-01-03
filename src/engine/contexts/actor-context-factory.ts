@@ -69,6 +69,14 @@ export class ActorContextFactory {
     })
   }
 
+  moveTo(x: number, y: number) {
+    return new ActorContext({
+      ...this.context,
+      x,
+      y,
+    })
+  }
+
   static fromAsset(
     asset: z.infer<typeof characterAssetSchema>,
     props: {

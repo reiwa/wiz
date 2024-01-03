@@ -34,14 +34,26 @@ export const RootView = (props: Props) => {
     }
     if (input === "w" && engine.hasEmptyTop) {
       send({ type: "MOVE", value: engine.moveToTop() })
+      for (const enemy of engine.townView.enemies) {
+        send({ type: "ENEMY_MOVE", value: engine.moveEnemy(enemy.id) })
+        send({ type: "CONTINUE" })
+      }
       send({ type: "CONTINUE" })
     }
     if (input === "a" && engine.hasEmptyLeft) {
       send({ type: "MOVE", value: engine.moveToLeft() })
+      for (const enemy of engine.townView.enemies) {
+        send({ type: "ENEMY_MOVE", value: engine.moveEnemy(enemy.id) })
+        send({ type: "CONTINUE" })
+      }
       send({ type: "CONTINUE" })
     }
     if (input === "s" && engine.hasEmptyBottom) {
       send({ type: "MOVE", value: engine.moveToBottom() })
+      for (const enemy of engine.townView.enemies) {
+        send({ type: "ENEMY_MOVE", value: engine.moveEnemy(enemy.id) })
+        send({ type: "CONTINUE" })
+      }
       send({ type: "CONTINUE" })
     }
     if (input === "d" && engine.hasEmptyRight) {
@@ -52,22 +64,22 @@ export const RootView = (props: Props) => {
       }
       send({ type: "CONTINUE" })
     }
-    if (input === "q" && engine.hasEmptyTopLeft) {
-      send({ type: "MOVE", value: engine.moveToTopLeft() })
-      send({ type: "CONTINUE" })
-    }
-    if (input === "e" && engine.hasEmptyTopRight) {
-      send({ type: "MOVE", value: engine.moveToTopRight() })
-      send({ type: "CONTINUE" })
-    }
-    if (input === "z" && engine.hasEmptyBottomLeft) {
-      send({ type: "MOVE", value: engine.moveToBottomLeft() })
-      send({ type: "CONTINUE" })
-    }
-    if (input === "x" && engine.hasEmptyBottomRight) {
-      send({ type: "MOVE", value: engine.moveToBottomRight() })
-      send({ type: "CONTINUE" })
-    }
+    // if (input === "q" && engine.hasEmptyTopLeft) {
+    //   send({ type: "MOVE", value: engine.moveToTopLeft() })
+    //   send({ type: "CONTINUE" })
+    // }
+    // if (input === "e" && engine.hasEmptyTopRight) {
+    //   send({ type: "MOVE", value: engine.moveToTopRight() })
+    //   send({ type: "CONTINUE" })
+    // }
+    // if (input === "z" && engine.hasEmptyBottomLeft) {
+    //   send({ type: "MOVE", value: engine.moveToBottomLeft() })
+    //   send({ type: "CONTINUE" })
+    // }
+    // if (input === "x" && engine.hasEmptyBottomRight) {
+    //   send({ type: "MOVE", value: engine.moveToBottomRight() })
+    //   send({ type: "CONTINUE" })
+    // }
     if (input === ".") {
       send({ type: "REST" })
     }

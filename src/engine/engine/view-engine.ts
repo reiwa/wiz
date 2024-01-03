@@ -104,11 +104,26 @@ export class ViewEngine {
   moveEnemy(enemyId: string) {
     const enemies = this.townView.enemies.map((enemy) => {
       if (enemy.id === enemyId) {
+        // 敵とプレイヤーの位置差を計算
+        const dx = this.player.x - enemy.x
+        const dy = this.player.y - enemy.y
+        // 敵をプレイヤーの方向に1ステップ動かす
+        const moveX = dx !== 0 ? dx / Math.abs(dx) : 0 // -1, 0, or 1
+        const moveY = dy !== 0 ? dy / Math.abs(dy) : 0 // -1, 0, or 1
+        // 新しい敵の位置を計算（壁や障害物を考慮）
+        const newEnemyX = enemy.x + moveX
+        const newEnemyY = enemy.y + moveY
+        // 移動先が壁や障害物でないかチェック
+        if (!this.isMoveable(newEnemyX, newEnemyY)) {
+          return enemy
+        }
+        // 敵の新しい位置を更新
         const factory = new ActorContextFactory(enemy)
-        return factory.moveToBottom()
+        return factory.moveTo(newEnemyX, newEnemyY)
       }
       return enemy
     })
+
     return new FieldViewContext({
       ...this.townView,
       enemies,
@@ -192,6 +207,17 @@ export class ViewEngine {
 
   get hasEmptyBottomRight() {
     const block = this.getBlock(this.player.x + 1, this.player.y + 1)
+    return !block.isWall
+  }
+
+  /**
+   * 進行可能かどうかを判定する
+   * @param x
+   * @param y
+   * @returns
+   */
+  isMoveable(x: number, y: number): boolean {
+    const block = this.getBlock(x, y)
     return !block.isWall
   }
 }

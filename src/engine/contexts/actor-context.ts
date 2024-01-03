@@ -5,6 +5,7 @@ const zProps = z.object({
   symbol: z.string(),
   x: z.number(),
   y: z.number(),
+  direction: z.string(),
   lifePoint: z.number(),
   maxLifePoint: z.number(),
   experiencePoint: z.number(),
@@ -38,6 +39,8 @@ export class ActorContext implements Props {
   readonly x!: Props["x"]
 
   readonly y!: Props["y"]
+
+  readonly direction!: Props["direction"]
 
   readonly lifePoint!: Props["lifePoint"]
 
