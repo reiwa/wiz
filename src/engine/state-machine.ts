@@ -1,11 +1,11 @@
 import { nanoid } from "nanoid"
 import { assign, createMachine } from "xstate"
-import { CharacterContext } from "./contexts/character-context.js"
+import { ActorContext } from "./contexts/actor-context.js"
 import { ConfigContext } from "./contexts/config-context.js"
 import { DungeonViewContext } from "./contexts/dungeon-view-context.js"
-import { MapViewContext } from "./contexts/map-view-context.js"
+import { FieldViewContext } from "./contexts/field-view-context.js"
+import { MapViewContextFactory } from "./contexts/map-view-context-factory.js"
 import { PlayerContext } from "./contexts/player-context.js"
-import { TownViewContext } from "./contexts/town-view-context.js"
 import { StateMachineContext } from "./contexts/types/state-machine-context.js"
 
 export const stateMachine = createMachine({
@@ -30,13 +30,13 @@ export const stateMachine = createMachine({
         leftWindowWidth: 32,
         bottomWindowHeight: 8,
       }),
-      townView: new TownViewContext({
+      fieldView: new FieldViewContext({
         playerX: 0,
         playerY: 0,
         viewportX: 0,
         viewportY: 0,
         enemies: [
-          new CharacterContext({
+          new ActorContext({
             id: nanoid(),
             name: "スライム",
             symbol: "S",
@@ -66,9 +66,7 @@ export const stateMachine = createMachine({
         x: 0,
         y: 0,
       }),
-      mapView: new MapViewContext({
-        mapText: props.input.mapText,
-      }),
+      mapView: MapViewContextFactory.fromMapText(props.input.mapText),
     }
   },
   initial: "FIELD_VIEW",
@@ -101,7 +99,7 @@ export const stateMachine = createMachine({
             ENEMY_MOVE: {
               target: "ENEMY_MOVED",
               actions: assign((props) => {
-                return { townView: props.event.value }
+                return { fieldView: props.event.value }
               }),
             },
             DAMAGE: "DAMAGED",

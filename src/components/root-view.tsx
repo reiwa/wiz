@@ -23,9 +23,9 @@ export const RootView = (props: Props) => {
   const engine = new ViewEngine({
     config: state.context.config,
     player: state.context.player,
-    view: state.context.townView,
+    view: state.context.fieldView,
     mapView: state.context.mapView,
-    townView: state.context.townView,
+    townView: state.context.fieldView,
   })
 
   useInput((input, key) => {

@@ -1,17 +1,17 @@
 import { z } from "zod"
-import { CharacterContext } from "./character-context.js"
+import { ActorContext } from "./actor-context.js"
 
 const zProps = z.object({
   playerX: z.number(),
   playerY: z.number(),
   viewportX: z.number(),
   viewportY: z.number(),
-  enemies: z.array(z.instanceof(CharacterContext)),
+  enemies: z.array(z.instanceof(ActorContext)),
 })
 
 export type Props = z.infer<typeof zProps>
 
-export class TownViewContext implements Props {
+export class FieldViewContext implements Props {
   /**
    * ビューの中心の座標
    */
@@ -47,6 +47,6 @@ export class TownViewContext implements Props {
 
   static fromJSON(json: string) {
     const props = JSON.parse(json)
-    return new TownViewContext(props)
+    return new FieldViewContext(props)
   }
 }

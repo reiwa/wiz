@@ -1,9 +1,9 @@
 import { z } from "zod"
-import { CharacterContext } from "./character-context.js"
+import { ActorContext } from "./actor-context.js"
 
 const zProps = z.object({
   id: z.string(),
-  characters: z.array(z.instanceof(CharacterContext)),
+  actors: z.array(z.instanceof(ActorContext)),
 })
 
 type Props = z.infer<typeof zProps>
@@ -14,7 +14,7 @@ type Props = z.infer<typeof zProps>
 export class PartyContext implements Props {
   readonly id!: Props["id"]
 
-  readonly characters: CharacterContext[] = []
+  readonly actors: ActorContext[] = []
 
   constructor(props: Props) {
     zProps.parse(props)

@@ -10,8 +10,14 @@ export const zProps = z.object({
 export type Props = z.infer<typeof zProps>
 
 export class PlayerContext implements Props {
+  /**
+   * ライフ
+   */
   readonly lifePoint!: Props["lifePoint"]
 
+  /**
+   * 経験値
+   */
   readonly experiencePoint!: Props["experiencePoint"]
 
   /**
@@ -29,10 +35,5 @@ export class PlayerContext implements Props {
 
   toJSON() {
     return JSON.stringify(this.props)
-  }
-
-  static fromJSON(json: string) {
-    const props = JSON.parse(json)
-    return new PlayerContext(props)
   }
 }

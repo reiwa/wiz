@@ -1,17 +1,17 @@
-import { CharacterContextAction } from "../contexts/character-context-action.js"
+import { ActorContextFactory } from "../contexts/actor-context-factory.js"
 import { ConfigContext } from "../contexts/config-context.js"
+import { FieldViewContext } from "../contexts/field-view-context.js"
 import { MapViewContext } from "../contexts/map-view-context.js"
-import { PlayerContextAction } from "../contexts/player-context-action.js"
+import { PlayerContextFactory } from "../contexts/player-context-factory.js"
 import { PlayerContext } from "../contexts/player-context.js"
-import { TownViewContext } from "../contexts/town-view-context.js"
 import { InkEngine } from "./ink-engine.js"
 
 type Props = {
   config: ConfigContext
-  view: TownViewContext
+  view: FieldViewContext
   player: PlayerContext
   mapView: MapViewContext
-  townView: TownViewContext
+  townView: FieldViewContext
 }
 
 export class ViewEngine {
@@ -44,7 +44,7 @@ export class ViewEngine {
   }
 
   getBlockValue(x: number, y: number) {
-    return this.mapView.fullMap[y * this.mapView.mapWidth + x]
+    return this.mapView.cells[y * this.mapView.width + x]
   }
 
   getBlock(x: number, y: number) {
@@ -85,9 +85,9 @@ export class ViewEngine {
             }
             if (
               mapX >= 0 &&
-              mapX < this.mapView.mapWidth &&
+              mapX < this.mapView.width &&
               mapY >= 0 &&
-              mapY < this.mapView.mapHeight
+              mapY < this.mapView.height
             ) {
               return this.getBlockValue(mapX, mapY)
             }
@@ -104,55 +104,55 @@ export class ViewEngine {
   moveEnemy(enemyId: string) {
     const enemies = this.townView.enemies.map((enemy) => {
       if (enemy.id === enemyId) {
-        const action = new CharacterContextAction(enemy)
-        return action.moveToBottom()
+        const factory = new ActorContextFactory(enemy)
+        return factory.moveToBottom()
       }
       return enemy
     })
-    return new TownViewContext({
+    return new FieldViewContext({
       ...this.townView,
       enemies,
     })
   }
 
   moveToTop() {
-    const action = new PlayerContextAction(this.player)
-    return action.moveToTop()
+    const factory = new PlayerContextFactory(this.player)
+    return factory.moveToTop()
   }
 
   moveToLeft() {
-    const action = new PlayerContextAction(this.player)
-    return action.moveToLeft()
+    const factory = new PlayerContextFactory(this.player)
+    return factory.moveToLeft()
   }
 
   moveToBottom() {
-    const action = new PlayerContextAction(this.player)
-    return action.moveToBottom()
+    const factory = new PlayerContextFactory(this.player)
+    return factory.moveToBottom()
   }
 
   moveToRight() {
-    const action = new PlayerContextAction(this.player)
-    return action.moveToRight()
+    const factory = new PlayerContextFactory(this.player)
+    return factory.moveToRight()
   }
 
   moveToTopLeft() {
-    const action = new PlayerContextAction(this.player)
-    return action.moveToTopLeft()
+    const factory = new PlayerContextFactory(this.player)
+    return factory.moveToTopLeft()
   }
 
   moveToTopRight() {
-    const action = new PlayerContextAction(this.player)
-    return action.moveToTopRight()
+    const factory = new PlayerContextFactory(this.player)
+    return factory.moveToTopRight()
   }
 
   moveToBottomLeft() {
-    const action = new PlayerContextAction(this.player)
-    return action.moveToBottomLeft()
+    const factory = new PlayerContextFactory(this.player)
+    return factory.moveToBottomLeft()
   }
 
   moveToBottomRight() {
-    const action = new PlayerContextAction(this.player)
-    return action.moveToBottomRight()
+    const factory = new PlayerContextFactory(this.player)
+    return factory.moveToBottomRight()
   }
 
   get hasEmptyTop() {

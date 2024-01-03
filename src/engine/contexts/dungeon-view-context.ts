@@ -9,6 +9,9 @@ export const zProps = z.object({
 export type Props = z.infer<typeof zProps>
 
 export class DungeonViewContext implements Props {
+  /**
+   * フロア
+   */
   readonly floor!: Props["floor"]
 
   /**
@@ -26,10 +29,5 @@ export class DungeonViewContext implements Props {
 
   toJSON() {
     return JSON.stringify(this.props)
-  }
-
-  static fromJSON(json: string) {
-    const props = JSON.parse(json)
-    return new DungeonViewContext(props)
   }
 }

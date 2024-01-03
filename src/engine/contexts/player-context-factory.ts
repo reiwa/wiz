@@ -1,41 +1,38 @@
-import { CharacterContext } from "./character-context.js"
+import { PlayerContext } from "./player-context.js"
 
-/**
- * Character
- */
-export class CharacterContextAction {
-  constructor(private context: CharacterContext) {}
+export class PlayerContextFactory {
+  constructor(private context: PlayerContext) {}
 
   moveToTop() {
-    return new CharacterContext({
+    return new PlayerContext({
       ...this.context,
       y: this.context.y - 1,
     })
   }
 
   moveToLeft() {
-    return new CharacterContext({
+    return new PlayerContext({
       ...this.context,
       x: this.context.x - 1,
     })
   }
 
   moveToBottom() {
-    return new CharacterContext({
+    return new PlayerContext({
       ...this.context,
       y: this.context.y + 1,
     })
   }
 
   moveToRight() {
-    return new CharacterContext({
+    return new PlayerContext({
       ...this.context,
       x: this.context.x + 1,
     })
   }
 
   moveToTopLeft() {
-    return new CharacterContext({
+    return new PlayerContext({
       ...this.context,
       x: this.context.x - 1,
       y: this.context.y - 1,
@@ -43,7 +40,7 @@ export class CharacterContextAction {
   }
 
   moveToTopRight() {
-    return new CharacterContext({
+    return new PlayerContext({
       ...this.context,
       x: this.context.x + 1,
       y: this.context.y - 1,
@@ -51,7 +48,7 @@ export class CharacterContextAction {
   }
 
   moveToBottomLeft() {
-    return new CharacterContext({
+    return new PlayerContext({
       ...this.context,
       x: this.context.x - 1,
       y: this.context.y + 1,
@@ -59,10 +56,15 @@ export class CharacterContextAction {
   }
 
   moveToBottomRight() {
-    return new CharacterContext({
+    return new PlayerContext({
       ...this.context,
       x: this.context.x + 1,
       y: this.context.y + 1,
     })
+  }
+
+  static fromJSON(json: string) {
+    const props = JSON.parse(json)
+    return new PlayerContext(props)
   }
 }
