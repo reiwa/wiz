@@ -35,14 +35,6 @@ export const stateMachine = createMachine({
         playerY: 0,
         viewportX: 0,
         viewportY: 0,
-      }),
-      mapView: new MapViewContext({
-        mapText: props.input.mapText,
-      }),
-      dungeonView: new DungeonViewContext({
-        floor: 0,
-        x: 0,
-        y: 0,
         enemies: [
           new CharacterContext({
             id: nanoid(),
@@ -68,6 +60,14 @@ export const stateMachine = createMachine({
             humanity: 4,
           }),
         ],
+      }),
+      dungeonView: new DungeonViewContext({
+        floor: 0,
+        x: 0,
+        y: 0,
+      }),
+      mapView: new MapViewContext({
+        mapText: props.input.mapText,
       }),
     }
   },
@@ -101,7 +101,7 @@ export const stateMachine = createMachine({
             ENEMY_MOVE: {
               target: "ENEMY_MOVED",
               actions: assign((props) => {
-                return { dungeonView: props.event.value }
+                return { townView: props.event.value }
               }),
             },
             DAMAGE: "DAMAGED",

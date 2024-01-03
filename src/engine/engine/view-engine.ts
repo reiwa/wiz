@@ -1,5 +1,5 @@
+import { CharacterContextAction } from "../contexts/character-context-action.js"
 import { ConfigContext } from "../contexts/config-context.js"
-import { DungeonViewContext } from "../contexts/dungeon-view-context.js"
 import { MapViewContext } from "../contexts/map-view-context.js"
 import { PlayerContextAction } from "../contexts/player-context-action.js"
 import { PlayerContext } from "../contexts/player-context.js"
@@ -11,7 +11,7 @@ type Props = {
   view: TownViewContext
   player: PlayerContext
   mapView: MapViewContext
-  dungeonView: DungeonViewContext
+  townView: TownViewContext
 }
 
 export class ViewEngine {
@@ -23,7 +23,7 @@ export class ViewEngine {
 
   readonly mapView!: Props["mapView"]
 
-  readonly dungeonView!: Props["dungeonView"]
+  readonly townView!: Props["townView"]
 
   constructor(props: Props) {
     Object.assign(this, props)
@@ -63,7 +63,7 @@ export class ViewEngine {
     const startX = this.player.x - halfViewportWidth
     const startY = this.player.y - halfViewportHeight
 
-    const enemies = this.dungeonView.enemies
+    const enemies = this.townView.enemies
 
     // ビューポート内の各ブロックを更新
     const viewport = Array.from(
@@ -101,8 +101,18 @@ export class ViewEngine {
     return viewport
   }
 
-  moveEnemy() {
-    // TODO: 敵の移動処理
+  moveEnemy(enemyId: string) {
+    const enemies = this.townView.enemies.map((enemy) => {
+      if (enemy.id === enemyId) {
+        const action = new CharacterContextAction(enemy)
+        return action.moveToBottom()
+      }
+      return enemy
+    })
+    return new TownViewContext({
+      ...this.townView,
+      enemies,
+    })
   }
 
   moveToTop() {

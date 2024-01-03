@@ -1,10 +1,12 @@
 import { z } from "zod"
+import { CharacterContext } from "./character-context.js"
 
 const zProps = z.object({
   playerX: z.number(),
   playerY: z.number(),
   viewportX: z.number(),
   viewportY: z.number(),
+  enemies: z.array(z.instanceof(CharacterContext)),
 })
 
 export type Props = z.infer<typeof zProps>
@@ -30,6 +32,8 @@ export class TownViewContext implements Props {
   readonly moveRangeX = 8
 
   readonly moveRangeY = 4
+
+  readonly enemies: Props["enemies"] = []
 
   constructor(private props: Props) {
     zProps.parse(props)

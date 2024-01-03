@@ -20,52 +20,52 @@ export const RootView = (props: Props) => {
 
   const [windowWidth, windowHeight] = useWindowSize()
 
-  const gameEngine = new ViewEngine({
+  const engine = new ViewEngine({
     config: state.context.config,
     player: state.context.player,
     view: state.context.townView,
     mapView: state.context.mapView,
-    dungeonView: state.context.dungeonView,
+    townView: state.context.townView,
   })
 
   useInput((input, key) => {
     if (key.ctrl && input === "c") {
       app.exit()
     }
-    if (input === "w" && gameEngine.hasEmptyTop) {
-      send({ type: "MOVE", value: gameEngine.moveToTop() })
+    if (input === "w" && engine.hasEmptyTop) {
+      send({ type: "MOVE", value: engine.moveToTop() })
       send({ type: "CONTINUE" })
     }
-    if (input === "a" && gameEngine.hasEmptyLeft) {
-      send({ type: "MOVE", value: gameEngine.moveToLeft() })
+    if (input === "a" && engine.hasEmptyLeft) {
+      send({ type: "MOVE", value: engine.moveToLeft() })
       send({ type: "CONTINUE" })
     }
-    if (input === "s" && gameEngine.hasEmptyBottom) {
-      send({ type: "MOVE", value: gameEngine.moveToBottom() })
+    if (input === "s" && engine.hasEmptyBottom) {
+      send({ type: "MOVE", value: engine.moveToBottom() })
       send({ type: "CONTINUE" })
     }
-    if (input === "d" && gameEngine.hasEmptyRight) {
-      send({ type: "MOVE", value: gameEngine.moveToRight() })
-      for (const enemy of gameEngine.dungeonView.enemies) {
-        send({ type: "ENEMY_MOVE", value: gameEngine.moveEnemy() })
+    if (input === "d" && engine.hasEmptyRight) {
+      send({ type: "MOVE", value: engine.moveToRight() })
+      for (const enemy of engine.townView.enemies) {
+        send({ type: "ENEMY_MOVE", value: engine.moveEnemy(enemy.id) })
         send({ type: "CONTINUE" })
       }
       send({ type: "CONTINUE" })
     }
-    if (input === "q" && gameEngine.hasEmptyTopLeft) {
-      send({ type: "MOVE", value: gameEngine.moveToTopLeft() })
+    if (input === "q" && engine.hasEmptyTopLeft) {
+      send({ type: "MOVE", value: engine.moveToTopLeft() })
       send({ type: "CONTINUE" })
     }
-    if (input === "e" && gameEngine.hasEmptyTopRight) {
-      send({ type: "MOVE", value: gameEngine.moveToTopRight() })
+    if (input === "e" && engine.hasEmptyTopRight) {
+      send({ type: "MOVE", value: engine.moveToTopRight() })
       send({ type: "CONTINUE" })
     }
-    if (input === "z" && gameEngine.hasEmptyBottomLeft) {
-      send({ type: "MOVE", value: gameEngine.moveToBottomLeft() })
+    if (input === "z" && engine.hasEmptyBottomLeft) {
+      send({ type: "MOVE", value: engine.moveToBottomLeft() })
       send({ type: "CONTINUE" })
     }
-    if (input === "x" && gameEngine.hasEmptyBottomRight) {
-      send({ type: "MOVE", value: gameEngine.moveToBottomRight() })
+    if (input === "x" && engine.hasEmptyBottomRight) {
+      send({ type: "MOVE", value: engine.moveToBottomRight() })
       send({ type: "CONTINUE" })
     }
     if (input === ".") {
@@ -76,7 +76,7 @@ export const RootView = (props: Props) => {
     }
   })
 
-  const blocks = gameEngine.getViewportBlocks(windowWidth, windowHeight)
+  const blocks = engine.getViewportBlocks(windowWidth, windowHeight)
 
   return (
     <Box flexDirection="row" gap={1} overflow={"hidden"}>
