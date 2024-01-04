@@ -2,18 +2,20 @@ import { ActorContext } from "../contexts/actor-context.js"
 import { Actor } from "../contexts/actor.js"
 import { BattleContext } from "../contexts/battle-context.js"
 import { ConfigContext } from "../contexts/config-context.js"
-import { FieldViewContext } from "../contexts/field-view-context.js"
+import { FieldContext } from "../contexts/field-context.js"
 import { MapSheetContext } from "../contexts/map-sheet-context.js"
+import { ViewportContext } from "../contexts/viewport-context.js"
 import { InkEngine } from "./ink-engine.js"
 import { PathEngine } from "./path-engine.js"
 
 type Props = {
   config: ConfigContext
-  view: FieldViewContext
+  view: FieldContext
   player: ActorContext
   mapSheet: MapSheetContext
-  fieldView: FieldViewContext
+  fieldView: FieldContext
   battle: BattleContext
+  viewport: ViewportContext
 }
 
 export class ViewEngine {
@@ -26,6 +28,10 @@ export class ViewEngine {
   readonly mapSheet!: Props["mapSheet"]
 
   readonly fieldView!: Props["fieldView"]
+
+  readonly battle!: Props["battle"]
+
+  readonly viewport!: Props["viewport"]
 
   constructor(props: Props) {
     Object.assign(this, props)
@@ -108,19 +114,16 @@ export class ViewEngine {
 
     const draftEnemies: ActorContext[] = []
     // [x, y]のペアを文字列として保存するためのSetを作成
-    const reservedPositions = new Set(
+    const reservations = new Set(
       this.fieldView.enemies.map((enemy) => `${enemy.x},${enemy.y}`),
     )
 
-    // プレイヤーの位置を予約済み位置に追加
-    // reservedPositions.add(`${player.x},${player.y}`)
-
     for (const enemy of this.fieldView.enemies) {
       // 現在の敵の位置を予約済みの位置から一時的に削除
-      reservedPositions.delete(`${enemy.x},${enemy.y}`)
+      reservations.delete(`${enemy.x},${enemy.y}`)
 
       // Setは文字列を要素として持つため、findNextに渡す前に適切な形式に変換する
-      const reservedArray = Array.from(reservedPositions).map((pos) => {
+      const reservedArray = Array.from(reservations).map((pos) => {
         return pos.split(",").map(Number) as [number, number]
       })
 
@@ -130,23 +133,16 @@ export class ViewEngine {
         reservedArray,
       )
 
-      if (path === null) {
-        // 次の移動先がない場合、元の位置を予約済み位置に戻す
-        reservedPositions.add(`${enemy.x},${enemy.y}`)
-        draftEnemies.push(enemy)
-        continue
-      }
-
       const [x, y] = path
       const factory = new Actor(enemy)
       const draftEnemy = factory.moveTo(x, y)
       draftEnemies.push(draftEnemy)
 
       // 新しい位置を予約済み位置に追加
-      reservedPositions.add(`${x},${y}`)
+      reservations.add(`${x},${y}`)
     }
 
-    return new FieldViewContext({
+    return new FieldContext({
       ...this.fieldView,
       enemies: draftEnemies,
     })

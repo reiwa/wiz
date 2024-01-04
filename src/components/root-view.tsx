@@ -27,6 +27,7 @@ export const RootView = (props: Props) => {
     mapSheet: state.context.mapSheet,
     fieldView: state.context.fieldView,
     battle: state.context.battle,
+    viewport: state.context.viewport,
   })
 
   useInput((input, key) => {
@@ -36,9 +37,10 @@ export const RootView = (props: Props) => {
     if (input === "w" && engine.hasEmptyTop) {
       const player = engine.moveToTop()
       send({ type: "MOVE", value: player })
+      const fieldView = engine.moveEnemies(player)
       send({
         type: "ENEMY_MOVE",
-        value: engine.moveEnemies(player),
+        value: fieldView,
       })
       send({ type: "CONTINUE" })
       send({ type: "CONTINUE" })

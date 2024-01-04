@@ -1,15 +1,13 @@
 import { z } from "zod"
-import { ActorContext } from "./actor-context.js"
 
 const zProps = z.object({
   viewportX: z.number(),
   viewportY: z.number(),
-  enemies: z.array(z.instanceof(ActorContext)),
 })
 
 export type Props = z.infer<typeof zProps>
 
-export class FieldViewContext implements Props {
+export class ViewportContext implements Props {
   /**
    * ビューの中心の座標
    */
@@ -24,20 +22,9 @@ export class FieldViewContext implements Props {
 
   readonly moveRangeY = 4
 
-  readonly enemies: Props["enemies"] = []
-
   constructor(private props: Props) {
     zProps.parse(props)
     Object.assign(this, props)
     Object.freeze(this)
-  }
-
-  toJSON() {
-    return JSON.stringify(this.props)
-  }
-
-  static fromJSON(json: string) {
-    const props = JSON.parse(json)
-    return new FieldViewContext(props)
   }
 }

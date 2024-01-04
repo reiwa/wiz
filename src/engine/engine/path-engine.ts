@@ -33,8 +33,9 @@ export class PathEngine {
     start: [number, number],
     goal: [number, number],
     reservedPositions: [number, number][],
-  ): [number, number] | null {
+  ): [number, number] {
     const [startX, startY] = start
+
     const [goalX, goalY] = goal
 
     // 移動可能かつ移動できないパスでない座標を考慮して経路を計算
@@ -43,20 +44,24 @@ export class PathEngine {
       [goalX, goalY],
       reservedPositions,
     )
-    if (path && path.length > 1) {
-      const nextPos = path[1]
 
-      // ゴールと次の移動位置が一致する場合はnullを返す
-      if (nextPos[0] === goalX && nextPos[1] === goalY) {
-        return null
-      }
-
-      // findPathからの経路はすでに移動可能な座標のみを含むため、
-      // 次の座標を直接返す
-      return nextPos
-    }
     // 次の座標が見つからない、または移動不可能な場合
-    return null
+    if (!path || path.length <= 1) {
+      return start
+    }
+
+    const [, nextBlock] = path
+
+    const [nextX, nextY] = nextBlock
+
+    // ゴールと次の移動位置が一致する場合はnullを返す
+    if (nextX === goalX && nextY === goalY) {
+      return start
+    }
+
+    // findPathからの経路はすでに移動可能な座標のみを含むため、
+    // 次の座標を直接返す
+    return nextBlock
   }
 
   findPath(
@@ -65,6 +70,7 @@ export class PathEngine {
     reservedPositions: [number, number][],
   ): [number, number][] | null {
     const [startX, startY] = start
+
     const [goalX, goalY] = goal
 
     // オープンリストとクローズドリストを初期化
