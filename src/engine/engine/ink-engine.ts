@@ -5,7 +5,7 @@ export class InkEngine {
     if (text === "@") {
       return {
         color: "#0078f8",
-        text: "@",
+        text: "𐀪",
         type: "PLAYER",
         isWall: true,
       }

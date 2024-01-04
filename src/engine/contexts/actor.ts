@@ -6,7 +6,7 @@ import { ActorContext } from "./actor-context.js"
 /**
  * Actor
  */
-export class ActorContextFactory {
+export class Actor {
   constructor(private context: ActorContext) {}
 
   moveToTop() {

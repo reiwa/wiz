@@ -1,12 +1,12 @@
 import { z } from "zod"
 
-export const zProps = z.object({
+const zProps = z.object({
   windowGap: z.number(),
   leftWindowWidth: z.number(),
   bottomWindowHeight: z.number(),
 })
 
-export type Props = z.infer<typeof zProps>
+type Props = z.infer<typeof zProps>
 
 export class ConfigContext implements Props {
   readonly windowGap!: Props["windowGap"]

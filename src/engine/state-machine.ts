@@ -1,10 +1,11 @@
 import { nanoid } from "nanoid"
 import { assign, createMachine } from "xstate"
 import { ActorContext } from "./contexts/actor-context.js"
+import { BattleContext } from "./contexts/battle-context.js"
 import { ConfigContext } from "./contexts/config-context.js"
-import { DungeonViewContext } from "./contexts/dungeon-view-context.js"
+import { DungeonViewContext } from "./contexts/dungeon-context.js"
 import { FieldViewContext } from "./contexts/field-view-context.js"
-import { MapViewContextFactory } from "./contexts/map-view-context-factory.js"
+import { MapSheet } from "./contexts/map-sheet.js"
 import { StateMachineContext } from "./contexts/types/state-machine-context.js"
 
 export const stateMachine = createMachine({
@@ -82,7 +83,10 @@ export const stateMachine = createMachine({
         x: 0,
         y: 0,
       }),
-      mapView: MapViewContextFactory.fromMapText(props.input.mapText),
+      mapSheet: MapSheet.fromMapText(props.input.mapText),
+      battle: new BattleContext({
+        commands: [],
+      }),
     }
   },
   initial: "FIELD_VIEW",

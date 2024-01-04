@@ -1,19 +1,14 @@
 import { z } from "zod"
+import { BattleCommandContext } from "./battle-command-context.js"
 
 const zProps = z.object({
-  cells: z.array(z.string()),
-  width: z.number(),
-  height: z.number(),
+  commands: z.array(z.instanceof(BattleCommandContext)),
 })
 
 export type Props = z.infer<typeof zProps>
 
-export class MapViewContext implements Props {
-  readonly width!: number
-
-  readonly height!: number
-
-  readonly cells!: string[]
+export class BattleContext implements Props {
+  readonly commands!: Props["commands"]
 
   constructor(props: Props) {
     zProps.parse(props)

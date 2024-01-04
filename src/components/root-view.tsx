@@ -24,8 +24,9 @@ export const RootView = (props: Props) => {
     config: state.context.config,
     player: state.context.player,
     view: state.context.fieldView,
-    mapView: state.context.mapView,
-    townView: state.context.fieldView,
+    mapSheet: state.context.mapSheet,
+    fieldView: state.context.fieldView,
+    battle: state.context.battle,
   })
 
   useInput((input, key) => {
@@ -33,35 +34,43 @@ export const RootView = (props: Props) => {
       app.exit()
     }
     if (input === "w" && engine.hasEmptyTop) {
-      send({ type: "MOVE", value: engine.moveToTop() })
-      for (const enemy of engine.townView.enemies) {
-        send({ type: "ENEMY_MOVE", value: engine.moveEnemy(enemy.id) })
-        send({ type: "CONTINUE" })
-      }
+      const player = engine.moveToTop()
+      send({ type: "MOVE", value: player })
+      send({
+        type: "ENEMY_MOVE",
+        value: engine.moveEnemies(player),
+      })
+      send({ type: "CONTINUE" })
       send({ type: "CONTINUE" })
     }
     if (input === "a" && engine.hasEmptyLeft) {
-      send({ type: "MOVE", value: engine.moveToLeft() })
-      for (const enemy of engine.townView.enemies) {
-        send({ type: "ENEMY_MOVE", value: engine.moveEnemy(enemy.id) })
-        send({ type: "CONTINUE" })
-      }
+      const player = engine.moveToLeft()
+      send({ type: "MOVE", value: player })
+      send({
+        type: "ENEMY_MOVE",
+        value: engine.moveEnemies(player),
+      })
+      send({ type: "CONTINUE" })
       send({ type: "CONTINUE" })
     }
     if (input === "s" && engine.hasEmptyBottom) {
-      send({ type: "MOVE", value: engine.moveToBottom() })
-      for (const enemy of engine.townView.enemies) {
-        send({ type: "ENEMY_MOVE", value: engine.moveEnemy(enemy.id) })
-        send({ type: "CONTINUE" })
-      }
+      const player = engine.moveToBottom()
+      send({ type: "MOVE", value: player })
+      send({
+        type: "ENEMY_MOVE",
+        value: engine.moveEnemies(player),
+      })
+      send({ type: "CONTINUE" })
       send({ type: "CONTINUE" })
     }
     if (input === "d" && engine.hasEmptyRight) {
-      send({ type: "MOVE", value: engine.moveToRight() })
-      for (const enemy of engine.townView.enemies) {
-        send({ type: "ENEMY_MOVE", value: engine.moveEnemy(enemy.id) })
-        send({ type: "CONTINUE" })
-      }
+      const player = engine.moveToRight()
+      send({ type: "MOVE", value: player })
+      send({
+        type: "ENEMY_MOVE",
+        value: engine.moveEnemies(player),
+      })
+      send({ type: "CONTINUE" })
       send({ type: "CONTINUE" })
     }
     // if (input === "q" && engine.hasEmptyTopLeft) {

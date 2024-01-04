@@ -1,16 +1,19 @@
-import { ActorContextFactory } from "../contexts/actor-context-factory.js"
 import { ActorContext } from "../contexts/actor-context.js"
+import { Actor } from "../contexts/actor.js"
+import { BattleContext } from "../contexts/battle-context.js"
 import { ConfigContext } from "../contexts/config-context.js"
 import { FieldViewContext } from "../contexts/field-view-context.js"
-import { MapViewContext } from "../contexts/map-view-context.js"
+import { MapSheetContext } from "../contexts/map-sheet-context.js"
 import { InkEngine } from "./ink-engine.js"
+import { PathEngine } from "./path-engine.js"
 
 type Props = {
   config: ConfigContext
   view: FieldViewContext
   player: ActorContext
-  mapView: MapViewContext
-  townView: FieldViewContext
+  mapSheet: MapSheetContext
+  fieldView: FieldViewContext
+  battle: BattleContext
 }
 
 export class ViewEngine {
@@ -20,9 +23,9 @@ export class ViewEngine {
 
   readonly player!: Props["player"]
 
-  readonly mapView!: Props["mapView"]
+  readonly mapSheet!: Props["mapSheet"]
 
-  readonly townView!: Props["townView"]
+  readonly fieldView!: Props["fieldView"]
 
   constructor(props: Props) {
     Object.assign(this, props)
@@ -43,7 +46,7 @@ export class ViewEngine {
   }
 
   getBlockValue(x: number, y: number) {
-    return this.mapView.cells[y * this.mapView.width + x]
+    return this.mapSheet.cells[y * this.mapSheet.width + x]
   }
 
   getBlock(x: number, y: number) {
@@ -62,7 +65,7 @@ export class ViewEngine {
     const startX = this.player.x - halfViewportWidth
     const startY = this.player.y - halfViewportHeight
 
-    const enemies = this.townView.enemies
+    const enemies = this.fieldView.enemies
 
     // ビューポート内の各ブロックを更新
     const viewport = Array.from(
@@ -84,9 +87,9 @@ export class ViewEngine {
             }
             if (
               mapX >= 0 &&
-              mapX < this.mapView.width &&
+              mapX < this.mapSheet.width &&
               mapY >= 0 &&
-              mapY < this.mapView.height
+              mapY < this.mapSheet.height
             ) {
               return this.getBlockValue(mapX, mapY)
             }
@@ -100,72 +103,92 @@ export class ViewEngine {
     return viewport
   }
 
-  moveEnemy(enemyId: string) {
-    const enemies = this.townView.enemies.map((enemy) => {
-      if (enemy.id === enemyId) {
-        // 敵とプレイヤーの位置差を計算
-        const dx = this.player.x - enemy.x
-        const dy = this.player.y - enemy.y
-        // 敵をプレイヤーの方向に1ステップ動かす
-        const moveX = dx !== 0 ? dx / Math.abs(dx) : 0 // -1, 0, or 1
-        const moveY = dy !== 0 ? dy / Math.abs(dy) : 0 // -1, 0, or 1
-        // 新しい敵の位置を計算（壁や障害物を考慮）
-        const newEnemyX = enemy.x + moveX
-        const newEnemyY = enemy.y + moveY
-        // 移動先が壁や障害物でないかチェック
-        if (!this.isMoveable(newEnemyX, newEnemyY)) {
-          return enemy
-        }
-        // 敵の新しい位置を更新
-        const factory = new ActorContextFactory(enemy)
-        return factory.moveTo(newEnemyX, newEnemyY)
+  moveEnemies(player: ActorContext) {
+    const pathEngine = new PathEngine(this.mapSheet)
+
+    const draftEnemies: ActorContext[] = []
+    // [x, y]のペアを文字列として保存するためのSetを作成
+    const reservedPositions = new Set(
+      this.fieldView.enemies.map((enemy) => `${enemy.x},${enemy.y}`),
+    )
+
+    // プレイヤーの位置を予約済み位置に追加
+    // reservedPositions.add(`${player.x},${player.y}`)
+
+    for (const enemy of this.fieldView.enemies) {
+      // 現在の敵の位置を予約済みの位置から一時的に削除
+      reservedPositions.delete(`${enemy.x},${enemy.y}`)
+
+      // Setは文字列を要素として持つため、findNextに渡す前に適切な形式に変換する
+      const reservedArray = Array.from(reservedPositions).map((pos) => {
+        return pos.split(",").map(Number) as [number, number]
+      })
+
+      const path = pathEngine.findNext(
+        [enemy.x, enemy.y],
+        [player.x, player.y],
+        reservedArray,
+      )
+
+      if (path === null) {
+        // 次の移動先がない場合、元の位置を予約済み位置に戻す
+        reservedPositions.add(`${enemy.x},${enemy.y}`)
+        draftEnemies.push(enemy)
+        continue
       }
-      return enemy
-    })
+
+      const [x, y] = path
+      const factory = new Actor(enemy)
+      const draftEnemy = factory.moveTo(x, y)
+      draftEnemies.push(draftEnemy)
+
+      // 新しい位置を予約済み位置に追加
+      reservedPositions.add(`${x},${y}`)
+    }
 
     return new FieldViewContext({
-      ...this.townView,
-      enemies,
+      ...this.fieldView,
+      enemies: draftEnemies,
     })
   }
 
   moveToTop() {
-    const factory = new ActorContextFactory(this.player)
+    const factory = new Actor(this.player)
     return factory.moveToTop()
   }
 
   moveToLeft() {
-    const factory = new ActorContextFactory(this.player)
+    const factory = new Actor(this.player)
     return factory.moveToLeft()
   }
 
   moveToBottom() {
-    const factory = new ActorContextFactory(this.player)
+    const factory = new Actor(this.player)
     return factory.moveToBottom()
   }
 
   moveToRight() {
-    const factory = new ActorContextFactory(this.player)
+    const factory = new Actor(this.player)
     return factory.moveToRight()
   }
 
   moveToTopLeft() {
-    const factory = new ActorContextFactory(this.player)
+    const factory = new Actor(this.player)
     return factory.moveToTopLeft()
   }
 
   moveToTopRight() {
-    const factory = new ActorContextFactory(this.player)
+    const factory = new Actor(this.player)
     return factory.moveToTopRight()
   }
 
   moveToBottomLeft() {
-    const factory = new ActorContextFactory(this.player)
+    const factory = new Actor(this.player)
     return factory.moveToBottomLeft()
   }
 
   moveToBottomRight() {
-    const factory = new ActorContextFactory(this.player)
+    const factory = new Actor(this.player)
     return factory.moveToBottomRight()
   }
 
