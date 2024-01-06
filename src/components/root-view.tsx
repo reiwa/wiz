@@ -38,40 +38,31 @@ export const RootView = (props: Props) => {
       const player = engine.moveToTop()
       send({ type: "MOVE", value: player })
       const fieldView = engine.moveEnemies(player)
-      send({
-        type: "ENEMY_MOVE",
-        value: fieldView,
-      })
+      send({ type: "ENEMY_MOVE", value: fieldView })
       send({ type: "CONTINUE" })
       send({ type: "CONTINUE" })
     }
     if (input === "a" && engine.hasEmptyLeft) {
       const player = engine.moveToLeft()
       send({ type: "MOVE", value: player })
-      send({
-        type: "ENEMY_MOVE",
-        value: engine.moveEnemies(player),
-      })
+      const fieldView = engine.moveEnemies(player)
+      send({ type: "ENEMY_MOVE", value: fieldView })
       send({ type: "CONTINUE" })
       send({ type: "CONTINUE" })
     }
     if (input === "s" && engine.hasEmptyBottom) {
       const player = engine.moveToBottom()
       send({ type: "MOVE", value: player })
-      send({
-        type: "ENEMY_MOVE",
-        value: engine.moveEnemies(player),
-      })
+      const fieldView = engine.moveEnemies(player)
+      send({ type: "ENEMY_MOVE", value: fieldView })
       send({ type: "CONTINUE" })
       send({ type: "CONTINUE" })
     }
     if (input === "d" && engine.hasEmptyRight) {
       const player = engine.moveToRight()
       send({ type: "MOVE", value: player })
-      send({
-        type: "ENEMY_MOVE",
-        value: engine.moveEnemies(player),
-      })
+      const fieldView = engine.moveEnemies(player)
+      send({ type: "ENEMY_MOVE", value: fieldView })
       send({ type: "CONTINUE" })
       send({ type: "CONTINUE" })
     }

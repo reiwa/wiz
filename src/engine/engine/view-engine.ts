@@ -189,41 +189,81 @@ export class ViewEngine {
   }
 
   get hasEmptyTop() {
+    for (const enemy of this.fieldView.enemies) {
+      if (enemy.x === this.player.x && enemy.y === this.player.y - 1) {
+        return false
+      }
+    }
     const block = this.getBlock(this.player.x, this.player.y - 1)
     return !block.isWall
   }
 
   get hasEmptyLeft() {
+    for (const enemy of this.fieldView.enemies) {
+      if (enemy.x === this.player.x - 1 && enemy.y === this.player.y) {
+        return false
+      }
+    }
     const block = this.getBlock(this.player.x - 1, this.player.y)
     return !block.isWall
   }
 
   get hasEmptyBottom() {
+    for (const enemy of this.fieldView.enemies) {
+      if (enemy.x === this.player.x && enemy.y === this.player.y + 1) {
+        return false
+      }
+    }
     const block = this.getBlock(this.player.x, this.player.y + 1)
     return !block.isWall
   }
 
   get hasEmptyRight() {
+    for (const enemy of this.fieldView.enemies) {
+      if (enemy.x === this.player.x + 1 && enemy.y === this.player.y) {
+        return false
+      }
+    }
     const block = this.getBlock(this.player.x + 1, this.player.y)
     return !block.isWall
   }
 
   get hasEmptyTopLeft() {
+    for (const enemy of this.fieldView.enemies) {
+      if (enemy.x === this.player.x - 1 && enemy.y === this.player.y - 1) {
+        return false
+      }
+    }
     const block = this.getBlock(this.player.x - 1, this.player.y - 1)
     return !block.isWall
   }
 
   get hasEmptyTopRight() {
+    for (const enemy of this.fieldView.enemies) {
+      if (enemy.x === this.player.x + 1 && enemy.y === this.player.y - 1) {
+        return false
+      }
+    }
     const block = this.getBlock(this.player.x + 1, this.player.y - 1)
     return !block.isWall
   }
 
   get hasEmptyBottomLeft() {
+    for (const enemy of this.fieldView.enemies) {
+      if (enemy.x === this.player.x - 1 && enemy.y === this.player.y + 1) {
+        return false
+      }
+    }
     const block = this.getBlock(this.player.x - 1, this.player.y + 1)
     return !block.isWall
   }
 
   get hasEmptyBottomRight() {
+    for (const enemy of this.fieldView.enemies) {
+      if (enemy.x === this.player.x + 1 && enemy.y === this.player.y + 1) {
+        return false
+      }
+    }
     const block = this.getBlock(this.player.x + 1, this.player.y + 1)
     return !block.isWall
   }
