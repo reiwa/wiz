@@ -44,7 +44,7 @@ export class AsciiSprite {
           // 偶数番目 = 文字
           const char = chars[index + 1]
           if (!color && !char) return null
-          return new AsciiBlock({ char: char || " ", color: parseInt(color) })
+          return new AsciiBlock({ char: char || "⣿", color: parseInt(color) })
         })
       })
       return new AsciiSprite({ width, height, blocks })
@@ -56,7 +56,7 @@ export class AsciiSprite {
         return Array.from({ length: width }).map((_, x) => {
           const char = chars[y * width + x]
           if (char === "") return null
-          return new AsciiBlock({ char: " ", color: parseInt(char) })
+          return new AsciiBlock({ char: "⣿", color: parseInt(char) })
         })
       })
       return new AsciiSprite({ width, height, blocks })

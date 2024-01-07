@@ -11,7 +11,7 @@ export const AsciiView = (props: Props) => {
       {props.sprite.blocks.map((rows, index) => (
         <Box key={index} flexDirection="row">
           {rows.map((block, index) => (
-            <Text key={index} backgroundColor={block?.colorCode}>
+            <Text key={index} color={block?.colorCode} bold>
               {block?.char ?? "."}
             </Text>
           ))}
