@@ -1,8 +1,8 @@
 import { z } from "zod"
-import { nesColors } from "../utils/nes-colors.js"
+import { xtermColors } from "../utils/xterm-colors.js"
 
 const zProps = z.object({
-  color: z.string(),
+  color: z.number(),
   char: z.string().nullable(),
 })
 
@@ -20,6 +20,6 @@ export class AsciiBlock {
   }
 
   get colorCode() {
-    return nesColors.get(this.color)
+    return xtermColors[this.color] ?? "#000000"
   }
 }

@@ -39,7 +39,7 @@ export class AsciiSprite {
       return Array.from({ length: width }).map((_, x) => {
         const char = chars[y * width + x]
         if (char === "") return null
-        return new AsciiBlock({ char: " ", color: char })
+        return new AsciiBlock({ char: " ", color: parseInt(char) })
       })
     })
     return new AsciiSprite({ width, height, blocks })
