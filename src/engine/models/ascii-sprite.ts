@@ -33,20 +33,35 @@ export class AsciiSprite {
       .flatMap((t) => t.trim().split("-"))
       .join("-")
       .split("-")
-    const height = Math.sqrt(chars.length / 4)
-    const width = height * 2
-    const blocks = Array.from({ length: height }).map((_, y) => {
-      return Array.from({ length: width }).map((_, x) => {
-        const index = y * width * 2 + x * 2
-        // 奇数番目 = 配色
-        const color = chars[index]
-        // 偶数番目 = 文字
-        const char = chars[index + 1]
-        if (!color && !char) return null
-        return new AsciiBlock({ char: char || " ", color: parseInt(color) })
+    if (chars.length === 256) {
+      const height = Math.sqrt(chars.length / 4)
+      const width = height * 2
+      const blocks = Array.from({ length: height }).map((_, y) => {
+        return Array.from({ length: width }).map((_, x) => {
+          const index = y * width * 2 + x * 2
+          // 奇数番目 = 配色
+          const color = chars[index]
+          // 偶数番目 = 文字
+          const char = chars[index + 1]
+          if (!color && !char) return null
+          return new AsciiBlock({ char: char || " ", color: parseInt(color) })
+        })
       })
-    })
-    return new AsciiSprite({ width, height, blocks })
+      return new AsciiSprite({ width, height, blocks })
+    }
+    if (chars.length === 128) {
+      const height = Math.sqrt(chars.length / 2)
+      const width = height * 2
+      const blocks = Array.from({ length: height }).map((_, y) => {
+        return Array.from({ length: width }).map((_, x) => {
+          const char = chars[y * width + x]
+          if (char === "") return null
+          return new AsciiBlock({ char: " ", color: parseInt(char) })
+        })
+      })
+      return new AsciiSprite({ width, height, blocks })
+    }
+    throw new Error("invalid text")
   }
 
   static empty(width: number, height: number) {
