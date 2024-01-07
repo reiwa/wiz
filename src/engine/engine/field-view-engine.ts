@@ -18,7 +18,7 @@ type Props = {
   viewport: ViewportContext
 }
 
-export class ViewEngine {
+export class FieldViewEngine {
   readonly config!: Props["config"]
 
   readonly view!: Props["view"]
@@ -38,17 +38,17 @@ export class ViewEngine {
     Object.freeze(this)
   }
 
-  getViewportWidth(windowWidth: number) {
+  get viewportWidth() {
     const borderWidth = 2
     const padding =
       this.config.leftWindowWidth + borderWidth + this.config.windowGap
-    return windowWidth - padding
+    return this.viewport.windowWidth - padding
   }
 
-  getViewportHeight(windowHeight: number) {
+  get viewportHeight() {
     const borderWidth = 2
     const padding = this.config.bottomWindowHeight + borderWidth
-    return windowHeight - padding
+    return this.viewport.windowHeight - padding
   }
 
   getBlockValue(x: number, y: number) {
@@ -60,12 +60,10 @@ export class ViewEngine {
     return engine.getBlock(this.getBlockValue(x, y))
   }
 
-  getViewportBlocks(windowWidth: number, windowHeight: number) {
+  get viewportBlocks() {
     // ビューポートの中心座標を計算
-    const halfViewportWidth = Math.floor(this.getViewportWidth(windowWidth) / 2)
-    const halfViewportHeight = Math.floor(
-      this.getViewportHeight(windowHeight) / 2,
-    )
+    const halfViewportWidth = Math.floor(this.viewportWidth / 2)
+    const halfViewportHeight = Math.floor(this.viewportHeight / 2)
 
     // ビューポートの左上の座標を計算
     const startX = this.player.x - halfViewportWidth
@@ -74,39 +72,31 @@ export class ViewEngine {
     const enemies = this.fieldView.enemies
 
     // ビューポート内の各ブロックを更新
-    const viewport = Array.from(
-      { length: this.getViewportHeight(windowHeight) },
-      (_, y) => {
-        return Array.from(
-          { length: this.getViewportWidth(windowWidth) },
-          (_, x) => {
-            const mapX = startX + x
-            const mapY = startY + y
-            // プレイヤーの位置
-            if (x === halfViewportWidth && y === halfViewportHeight) {
-              return "@"
-            }
-            for (const enemy of enemies) {
-              if (enemy.x === mapX && enemy.y === mapY) {
-                return "e"
-              }
-            }
-            if (
-              mapX >= 0 &&
-              mapX < this.mapSheet.width &&
-              mapY >= 0 &&
-              mapY < this.mapSheet.height
-            ) {
-              return this.getBlockValue(mapX, mapY)
-            }
-            // マップの外
-            return "0"
-          },
-        )
-      },
-    )
-
-    return viewport
+    return Array.from({ length: this.viewportHeight }, (_, y) => {
+      return Array.from({ length: this.viewportWidth }, (_, x) => {
+        const mapX = startX + x
+        const mapY = startY + y
+        // プレイヤーの位置
+        if (x === halfViewportWidth && y === halfViewportHeight) {
+          return "@"
+        }
+        for (const enemy of enemies) {
+          if (enemy.x === mapX && enemy.y === mapY) {
+            return "e"
+          }
+        }
+        if (
+          mapX >= 0 &&
+          mapX < this.mapSheet.width &&
+          mapY >= 0 &&
+          mapY < this.mapSheet.height
+        ) {
+          return this.getBlockValue(mapX, mapY)
+        }
+        // マップの外
+        return "0"
+      })
+    })
   }
 
   moveEnemies(player: ActorContext) {

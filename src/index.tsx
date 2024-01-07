@@ -11,7 +11,7 @@ const mapText = await readFile("assets/map.txt", "utf-8")
  */
 process.on("exit", (code) => {
   if (code === 0) {
-    console.clear()
+    // console.clear()
   }
   // save
 })

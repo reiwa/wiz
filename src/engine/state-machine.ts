@@ -16,83 +16,12 @@ export const stateMachine = createMachine({
     context: StateMachineContext
     input: {
       mapText: string
+      windowWidth: number
+      windowHeight: number
     }
   },
-  context(props) {
-    return {
-      player: new ActorContext({
-        id: nanoid(),
-        name: "@",
-        symbol: "@",
-        x: 18,
-        y: 14,
-        direction: "RIGHT",
-        lifePoint: 4,
-        maxLifePoint: 4,
-        experiencePoint: 2,
-        cooldownTime: 1,
-        maxCooldownTime: 1,
-        attack: 2,
-        maxAttack: 2,
-        defense: 2,
-        maxDefense: 2,
-        magicAttack: 0,
-        maxMagicAttack: 0,
-        magicDefense: 0,
-        maxMagicDefense: 0,
-        dexterity: 1,
-        evasion: 1,
-        humanity: 4,
-      }),
-      config: new ConfigContext({
-        windowGap: 1,
-        leftWindowWidth: 32,
-        bottomWindowHeight: 8,
-      }),
-      viewport: new ViewportContext({
-        viewportX: 0,
-        viewportY: 0,
-      }),
-      fieldView: new FieldContext({
-        enemies: [
-          new ActorContext({
-            id: nanoid(),
-            name: "スライム",
-            symbol: "S",
-            x: 8,
-            y: 8,
-            direction: "RIGHT",
-            lifePoint: 4,
-            maxLifePoint: 4,
-            experiencePoint: 2,
-            cooldownTime: 1,
-            maxCooldownTime: 1,
-            attack: 2,
-            maxAttack: 2,
-            defense: 2,
-            maxDefense: 2,
-            magicAttack: 0,
-            maxMagicAttack: 0,
-            magicDefense: 0,
-            maxMagicDefense: 0,
-            dexterity: 1,
-            evasion: 1,
-            humanity: 4,
-          }),
-        ],
-      }),
-      dungeonView: new DungeonViewContext({
-        floor: 0,
-        x: 0,
-        y: 0,
-      }),
-      mapSheet: MapSheet.fromMapText(props.input.mapText),
-      battle: new BattleContext({
-        commands: [],
-      }),
-    }
-  },
-  initial: "FIELD_VIEW",
+  // initial: "FIELD_VIEW",
+  initial: "BATTLE_VIEW",
   states: {
     FIELD_VIEW: {
       description: "フィールド",
@@ -345,5 +274,88 @@ export const stateMachine = createMachine({
 
       initial: "COMMAND_STATE",
     },
+  },
+  on: {
+    UPDATE_WINDOW_SIZE: {
+      actions: assign((props) => {
+        return { viewport: props.event.value }
+      }),
+    },
+  },
+  context(props) {
+    return {
+      player: new ActorContext({
+        id: nanoid(),
+        name: "@",
+        symbol: "@",
+        x: 18,
+        y: 14,
+        direction: "RIGHT",
+        lifePoint: 4,
+        maxLifePoint: 4,
+        experiencePoint: 2,
+        cooldownTime: 1,
+        maxCooldownTime: 1,
+        attack: 2,
+        maxAttack: 2,
+        defense: 2,
+        maxDefense: 2,
+        magicAttack: 0,
+        maxMagicAttack: 0,
+        magicDefense: 0,
+        maxMagicDefense: 0,
+        dexterity: 1,
+        evasion: 1,
+        humanity: 4,
+      }),
+      config: new ConfigContext({
+        windowGap: 1,
+        leftWindowWidth: 32,
+        bottomWindowHeight: 8,
+      }),
+      viewport: new ViewportContext({
+        viewportX: 0,
+        viewportY: 0,
+        windowWidth: props.input.windowWidth,
+        windowHeight: props.input.windowHeight,
+      }),
+      fieldView: new FieldContext({
+        enemies: [
+          new ActorContext({
+            id: nanoid(),
+            name: "スライム",
+            symbol: "S",
+            x: 8,
+            y: 8,
+            direction: "RIGHT",
+            lifePoint: 4,
+            maxLifePoint: 4,
+            experiencePoint: 2,
+            cooldownTime: 1,
+            maxCooldownTime: 1,
+            attack: 2,
+            maxAttack: 2,
+            defense: 2,
+            maxDefense: 2,
+            magicAttack: 0,
+            maxMagicAttack: 0,
+            magicDefense: 0,
+            maxMagicDefense: 0,
+            dexterity: 1,
+            evasion: 1,
+            humanity: 4,
+          }),
+        ],
+      }),
+      dungeonView: new DungeonViewContext({
+        floor: 0,
+        x: 0,
+        y: 0,
+      }),
+      mapSheet: MapSheet.fromMapText(props.input.mapText),
+      battle: new BattleContext({
+        commands: [],
+      }),
+    }
   },
 })

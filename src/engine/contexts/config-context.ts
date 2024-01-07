@@ -15,6 +15,10 @@ export class ConfigContext implements Props {
 
   readonly bottomWindowHeight!: Props["bottomWindowHeight"]
 
+  readonly battleCommandWindowHeight = 3 + 2
+
+  readonly battleStatusWindowHeight = 5 + 2
+
   constructor(props: Props) {
     zProps.parse(props)
     Object.assign(this, props)
