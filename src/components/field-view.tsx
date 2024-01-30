@@ -35,7 +35,7 @@ export const FieldView = (props: Props) => {
     viewport: props.state.context.viewport,
   })
 
-  useInput((input, key) => {
+  useInput((input) => {
     if (input === "w" && engine.hasEmptyTop) {
       const player = engine.moveToTop()
       props.send({ type: "MOVE", value: player })

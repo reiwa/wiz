@@ -31,7 +31,7 @@ export const BattleView = (props: Props) => {
     viewport: props.state.context.viewport,
   })
 
-  useInput((input, key) => {
+  useInput((input) => {
     if (input === "w") {
       props.send({ type: "REST" })
     }

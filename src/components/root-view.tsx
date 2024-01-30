@@ -1,5 +1,4 @@
 import { useMachine } from "@xstate/react"
-import { useApp, useInput } from "ink"
 import { useEffect } from "react"
 import { stateMachine } from "../engine/state-machine.js"
 import { useWindowSize } from "../hooks/use-window-size.js"
@@ -11,14 +10,6 @@ type Props = {
 }
 
 export const RootView = (props: Props) => {
-  const app = useApp()
-
-  useInput((input, key) => {
-    if (key.ctrl && input === "c") {
-      app.exit()
-    }
-  })
-
   const [windowWidth, windowHeight] = useWindowSize()
 
   const [state, send] = useMachine(stateMachine, {
