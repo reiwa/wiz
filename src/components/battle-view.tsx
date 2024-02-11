@@ -1,4 +1,4 @@
-import { Box, useInput } from "ink"
+import { useInput } from "ink"
 import {
   AnyActorRef,
   AnyEventObject,
@@ -8,10 +8,9 @@ import {
 } from "xstate"
 import { StateMachineContext } from "../engine/contexts/types/state-machine-context.js"
 import { BattleViewEngine } from "../engine/engine/battle-view-engine.js"
-import { AsciiView } from "./ascii-view.js"
-import { BattleCommandView } from "./battle-command-view.js"
-import { BattleStatusView } from "./battle-status-view.js"
-
+import { GraphComponentBase } from "../engine/engine/graph-component-base.js"
+import { GraphComponentWindow } from "../engine/engine/graph-component-window.js"
+import { GraphView } from "./graph-view.js"
 type Props = {
   send(event: AnyEventObject): void
   state: MachineSnapshot<
@@ -31,7 +30,9 @@ export const BattleView = (props: Props) => {
     viewport: props.state.context.viewport,
   })
 
-  useInput((input) => {
+  useInput((input, key) => {
+    if (key.rightArrow) {
+    }
     if (input === "w") {
       props.send({ type: "REST" })
     }
@@ -40,11 +41,34 @@ export const BattleView = (props: Props) => {
     }
   })
 
-  return (
-    <Box flexDirection="column" overflow={"hidden"}>
-      <AsciiView sprite={engine.battleView} />
-      <BattleStatusView config={props.state.context.config} />
-      <BattleCommandView config={props.state.context.config} />
-    </Box>
-  )
+  const component = new GraphComponentBase({
+    width: props.state.context.viewport.windowWidth,
+    height: props.state.context.viewport.windowHeight,
+    children: [
+      new GraphComponentWindow({
+        x: 2,
+        y: 1,
+        width: 40,
+        height: 10,
+        children: [],
+      }),
+      new GraphComponentWindow({
+        x: 10,
+        y: 8,
+        width: 40,
+        height: 10,
+        children: [
+          new GraphComponentWindow({
+            x: 4,
+            y: 2,
+            width: 12,
+            height: 4,
+            children: [],
+          }),
+        ],
+      }),
+    ],
+  })
+
+  return <GraphView texts={component.node.texts2d} />
 }

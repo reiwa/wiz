@@ -6,7 +6,9 @@
   "scripts": {
     "build": "swc src --out-dir lib",
     "dev": "node --loader @swc-node/register/esm src/index.tsx",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "test": "vitest --run",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "reiwa",
@@ -20,7 +22,7 @@
     "react": "^18.2.0",
     "regenerator-runtime": "^0.14.1",
     "terminal-size": "^4.0.0",
-    "vitest": "^1.1.1",
+    "vitest": "^1.2.2",
     "xstate": "^5.4.1",
     "zod": "^3.22.4"
   },
